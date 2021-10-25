@@ -120,7 +120,7 @@ export default {
   flex-direction: row;
 }
 .left-view {
-  width: 250px;
+  width: 300px;
   padding: 12px;
 }
 

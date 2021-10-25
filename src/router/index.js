@@ -5,7 +5,7 @@ import firebase from 'firebase'
 
 import Driver from '@/pages/Driver'
 import Signin from '@/pages/Signin'
-import SignUp from '@/pages/SignUp'
+import SignUp from '@/pages/Signup'
 import Admin from '@/pages/Admin'
 
 

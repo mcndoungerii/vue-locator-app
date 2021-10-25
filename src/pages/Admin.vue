@@ -27,6 +27,13 @@
 
 <script>
 import firebase from "firebase";
+import motorSvg from "@/assets/img/motorcycle.svg";
+import deliverSvg from "@/assets/img/delivery-man.svg";
+import deliver1Svg from "@/assets/img/delivery-man1.svg";
+import tuktukSvg from "@/assets/img/tuk-tuk.svg";
+import tuktuk3Svg from "@/assets/img/tuk-tuk3.svg";
+import tuktuk4Svg from "@/assets/img/tuk-tuk4.svg";
+import carSvg from "@/assets/img/hatchback.svg";
 export default {
   data() {
     return {
@@ -55,17 +62,25 @@ export default {
     const markers = [];
     const infoWindows = [];
 
-    const lineSymbol = {
-        path: google.maps.SymbolPath.CIRCLE,
-        scale: 8,
-        strokeColor: "#393",
-      };
+
+      const svgMarker = {
+        url: deliver1Svg,
+        fillColor: "blue",
+        fillOpacity: 0.6,
+        strokeWeight: 0,
+        rotation: 0,
+        scale: 2,
+        //anchor: new google.maps.Point(15, 30),
+        scaledSize: new google.maps.Size(25, 30), // scaled size
+        origin: new google.maps.Point(0, 0), // origin
+        //anchor: new google.maps.Point(0, 0), // anchor
+      }
 
     for (let i = 0; i < docs.length; i++) {
       markers.push(
         new google.maps.Marker({
           map: this.map,
-          icon: lineSymbol
+          icon: svgMarker
         })
       );
 

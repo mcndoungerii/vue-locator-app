@@ -38,7 +38,7 @@ export default {
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
         .then(user => {
-          console.log("user is singed in ");
+          console.log("user is signed in ");
         })
         .catch(error => {
           console.log(error.message);

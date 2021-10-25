@@ -8,11 +8,7 @@
       </div>
       <div class="ui segment">
         <div class="ui divided items">
-          <div
-            class="item"
-            v-for="driver in drivers"
-            :key="driver.id"
-          >
+          <div class="item" v-for="driver in drivers" :key="driver.id">
             <div class="content">
               <div class="header">{{driver.email}}</div>
               <div class="meta">
@@ -28,20 +24,55 @@
     <section class="right-view" ref="map"></section>
   </div>
 </template>
+
 <script>
 import firebase from "firebase";
 export default {
   data() {
     return {
       user: null,
-      drivers: []
+      drivers: [],
+      map: null
     };
   },
   async mounted() {
     firebase.auth().onAuthStateChanged(user => {
       this.user = user;
     });
-firebase
+
+    this.map = new google.maps.Map(this.$refs["map"], {
+      zoom: 13,
+      center: new google.maps.LatLng(-6.7785501,39.2611719),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+
+    const { docs } = await firebase
+      .firestore()
+      .collection("users")
+      .where("active", "==", true)
+      .get();
+
+    const markers = [];
+    const infoWindows = [];
+
+    const lineSymbol = {
+        path: google.maps.SymbolPath.CIRCLE,
+        scale: 8,
+        strokeColor: "#393",
+      };
+
+    for (let i = 0; i < docs.length; i++) {
+      markers.push(
+        new google.maps.Marker({
+          map: this.map,
+          icon: lineSymbol
+        })
+      );
+
+      infoWindows.push(new google.maps.InfoWindow({ disableAutoPan: true }));
+    }
+
+    firebase
       .firestore()
       .collection("users")
       .where("active", "==", true)
@@ -50,9 +81,19 @@ firebase
         for (let i = 0; i < snap.docs.length; i++) {
           var driver = snap.docs[i].data();
           this.drivers.push(driver);
+
+          markers[i].setPosition(
+            new google.maps.LatLng(driver.lat, driver.lng)
+          );
+
+          infoWindows[i].setContent(
+            `<div class="ui header">${driver.email} </div>`
+          );
+          infoWindows[i].open(this.map, markers[i]);
         }
       });
   },
+
   methods: {
     signOutButtonPressed() {
       firebase
@@ -70,6 +111,7 @@ firebase
   }
 };
 </script>
+
 <style>
 .admin-view {
   width: 100%;
@@ -81,6 +123,7 @@ firebase
   width: 250px;
   padding: 12px;
 }
+
 .right-view {
   flex-grow: 1;
 }
